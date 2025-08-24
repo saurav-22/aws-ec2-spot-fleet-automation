@@ -13,7 +13,7 @@ This project demonstrates how to **automate the provisioning of AWS EC2 Spot Ins
 
 - **Spot Fleet Requests** → to launch instances across multiple subnets with high availability.  
 - **AWS CLI** → to request, describe, and manage fleets.  
-- **PowerShell** → to automate the full lifecycle (launch, wait for instance, fetch public IP, SSH in).  
+- **PowerShell OR Bash** → to automate the full lifecycle (launch, wait for instance, fetch public IP, SSH in).  
 - **UserData scripts** → to bootstrap essential DevOps tools (Git, Docker, Jenkins) immediately on first boot.  
 
 ### 🔹 Why this project?  
@@ -28,6 +28,8 @@ This project demonstrates how to **automate the provisioning of AWS EC2 Spot Ins
 - **`spot_instance_request.json`** → Multi-subnet Spot Fleet configuration (place Base64 user-data in `"UserData"`).
 - **`userdata.sh`** → Bootstrap script (Docker, Git, Docker Compose, Jenkins container).
 - **`launch-spotfleet.ps1`** → PowerShell automation (request fleet → wait for instance → get public IP → wait for SSH → SSH).
+- **`launch-spotfleet.bat`** → Batch automation (request fleet → wait for instance → get public IP → SSH).
+- **`launch-spotfleet.sh`** → Bash automation (request fleet → wait for instance → get public IP → wait for SSH → SSH).
 
 ---
 
@@ -65,7 +67,7 @@ Before running the scripts, ensure you have the following setup in your AWS envi
 
 6. **PowerShell (Windows) or Terminal (Linux/macOS)**  
    - The automation script (`launch-spotfleet.ps1`) is designed for PowerShell on Windows.  
-   - Alternatively, you can manually run CLI commands from CloudShell or a Linux terminal.
+   - Alternatively, you can manually run CLI commands from CloudShell or execute the `launch-spotfleet.sh` shell script in Linux terminal.
 
 ---
 
@@ -98,18 +100,23 @@ base64 userdata.sh > userdata.txt
 
 ---
 
-### 3) Edit `launch-spotfleet.ps1` and update:
-- `$JsonFile` → path to your `spot_instance_request.json`
+### 3) Edit `launch-spotfleet.sh` and update:
+- `JSON_FILE` → path to your `spot_instance_request.json`
 
-- `$KeyFile` → path to your `.pem` key
+- `KEY_FILE` → path to your `.pem` key
 
-- `$User` → `ec2-user` (Amazon Linux) or `ubuntu` (Ubuntu)
+- `USER` → `ec2-user` (Amazon Linux) or `ubuntu` (Ubuntu)
 
 ---
 
-### 4) Run the file in powershell
+### 4) Make the file executable and run it.
+- To make the file executable:
 ```
-.\launch-spotfleet.ps1
+chmod +x launch-spotfleet.sh
+```
+- To run the file:
+```
+./launch-spotfleet.sh
 ```
 
 ---
@@ -170,18 +177,16 @@ aws ec2 request-spot-fleet --spot-fleet-request-config file://spot_instance_requ
 
 ---
 
-## ⚡ Alternative: Run with Batch Script (Windows)
+## ⚡ Alternative: Run with Batch Script OR Powershell (Windows)
 
-If you don’t want to use the PowerShell script (`launch-spotfleet.ps1`),  
-you can use the included **`launch-spotfleet.bat`** file instead.
+If you don’t want to use the Bash script (`launch-spotfleet.sh`),  
+you can use the included **`launch-spotfleet.bat`** or **`launch-spotfleet.ps1`** file instead.
 
-The `.bat` script automates the same process:  
+The `.bat` or `.ps1` scripts automate the same process:  
 - Submits the Spot Fleet request  
 - Waits for instance assignment  
-- Fetches the public IP  
+- Fetches the public IP
 - SSHs into the instance  
-
-This is useful if you prefer sticking to the classic Windows Command Prompt.  
 
 ---
 
