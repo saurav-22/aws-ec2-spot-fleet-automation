@@ -11,25 +11,25 @@
 
 This project demonstrates how to **automate the provisioning of AWS EC2 Spot Instances** using:  
 
-- **Spot Fleet Requests** → to launch instances across multiple subnets with high availability.  
-- **AWS CLI** → to request, describe, and manage fleets.  
-- **PowerShell OR Bash** → to automate the full lifecycle (launch, wait for instance, fetch public IP, SSH in).  
-- **UserData scripts** → to bootstrap essential DevOps tools (Git, Docker, Jenkins) immediately on first boot.  
+- **Spot Fleet Requests** -> to launch instances across multiple subnets with high availability.  
+- **AWS CLI** -> to request, describe, and manage fleets.  
+- **PowerShell OR Bash** -> to automate the full lifecycle (launch, wait for instance, fetch public IP, SSH in).  
+- **UserData scripts** -> to bootstrap essential DevOps tools (Git, Docker, Jenkins) immediately on first boot.  
 
 ### 🔹 Why this project?  
-- **Cost Optimization** → Spot Instances are up to 90% cheaper than On-Demand.  
-- **Automation** → No manual setup; the instance is DevOps-ready in minutes.  
-- **Hands-on DevOps Practice** → Demonstrates skills in AWS, Infrastructure as Code, automation scripting, and CI/CD setup.
+- **Cost Optimization** -> Spot Instances are up to 90% cheaper than On-Demand.  
+- **Automation** -> No manual setup; the instance is DevOps-ready in minutes.  
+- **Hands-on DevOps Practice** -> Demonstrates skills in AWS, Infrastructure as Code, automation scripting, and CI/CD setup.
 
 ---
 
 ## 📌 Files in this Repo
 
-- **`spot_instance_request.json`** → Multi-subnet Spot Fleet configuration (place Base64 user-data in `"UserData"`).
-- **`userdata.sh`** → Bootstrap script (Docker, Git, Docker Compose, Jenkins container).
-- **`launch-spotfleet.ps1`** → PowerShell automation (request fleet → wait for instance → get public IP → wait for SSH → SSH).
-- **`launch-spotfleet.bat`** → Batch automation (request fleet → wait for instance → get public IP → SSH).
-- **`launch-spotfleet.sh`** → Bash automation (request fleet → wait for instance → get public IP → wait for SSH → SSH).
+- **`spot_instance_request.json`** -> Multi-subnet Spot Fleet configuration (place Base64 user-data in `"UserData"`).
+- **`userdata.sh`** -> Bootstrap script (Docker, Git, Docker Compose, Jenkins container).
+- **`launch-spotfleet.ps1`** -> PowerShell automation (request fleet -> wait for instance -> get public IP -> wait for SSH -> SSH).
+- **`launch-spotfleet.bat`** -> Batch automation (request fleet -> wait for instance -> get public IP -> SSH).
+- **`launch-spotfleet.sh`** -> Bash automation (request fleet -> wait for instance -> get public IP -> wait for SSH -> SSH).
 
 ---
 
@@ -43,8 +43,8 @@ Before running the scripts, ensure you have the following setup in your AWS envi
 
 2. **Security Group**  
    - Must allow the following inbound rules:
-     - **TCP 22** → SSH access
-     - **TCP 8080** → Jenkins web interface
+     - **TCP 22** -> SSH access
+     - **TCP 8080** -> Jenkins web interface
      - (Optional) **0.0.0.0/0** for general public access (limit by IP if possible for security).
 
 3. **EC2 Key Pair**  
@@ -75,11 +75,11 @@ Before running the scripts, ensure you have the following setup in your AWS envi
 
 ### 1) Fill in placeholders in `spot_instance_request.json`
 Open `spot_instance_request.json` and replace:
-- `<account-id>` → your AWS Account ID
-- `ami-xxxxxxxx` → a valid AMI (e.g., Amazon Linux 2)
-- `my-keypair` → your EC2 key pair name
-- `subnet-aaa111`, `subnet-bbb222`, `subnet-ccc333` → your subnet IDs
-- `sg-xxxxxx` → your security group ID (must allow **TCP 22** for SSH and **TCP 8080** for Jenkins UI)
+- `<account-id>` -> your AWS Account ID
+- `ami-xxxxxxxx` -> a valid AMI (e.g., Amazon Linux 2)
+- `my-keypair` -> your EC2 key pair name
+- `subnet-aaa111`, `subnet-bbb222`, `subnet-ccc333` -> your subnet IDs
+- `sg-xxxxxx` -> your security group ID (must allow **TCP 22** for SSH and **TCP 8080** for Jenkins UI)
 
 > We’ll paste the Base64 of your `userdata.sh` into `"UserData"` in Step 2.
 
@@ -101,11 +101,11 @@ base64 userdata.sh > userdata.txt
 ---
 
 ### 3) Edit `launch-spotfleet.sh` and update:
-- `JSON_FILE` → path to your `spot_instance_request.json`
+- `JSON_FILE` -> path to your `spot_instance_request.json`
 
-- `KEY_FILE` → path to your `.pem` key
+- `KEY_FILE` -> path to your `.pem` key
 
-- `USER` → `ec2-user` (Amazon Linux) or `ubuntu` (Ubuntu)
+- `USER` -> `ec2-user` (Amazon Linux) or `ubuntu` (Ubuntu)
 
 ---
 
