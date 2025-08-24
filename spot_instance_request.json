@@ -9,40 +9,127 @@
     "SpotMaxTotalPrice": "0.015",
     "LaunchSpecifications": [
         {
-            "ImageId": "ami-xxxxxxxx",
+            "ImageId": "ami-0861f4e788f5069dd",
             "KeyName": "my-keypair",
-            "InstanceType": "t3a.large",
-            "SubnetId": "subnet-aaa111",
-            "SecurityGroups": ["sg-xxxxxx"],
-            "AssociatePublicIpAddress": true,
-            "UserData": "BASE64_ENCODED_SCRIPT_HERE",
+            "BlockDeviceMappings": [
+                {
+                    "DeviceName": "/dev/xvda",
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 7500,
+                        "VolumeSize": 15,
+                        "VolumeType": "gp3",
+                        "Encrypted": false,
+                        "Throughput": 125
+                    }
+                }
+            ],
             "TagSpecifications": [
-                { "ResourceType": "instance", "Tags": [{ "Key": "Name", "Value": "DevOps-Spot" }] }
-            ]
+                {
+                    "ResourceType": "instance",
+                    "Tags": [
+                        {
+                            "Key": "Name",
+                            "Value": "DevOps-Spot"
+                        }
+                    ]
+                }
+            ],
+            "NetworkInterfaces": [
+                {
+                    "DeviceIndex": 0,
+                    "SubnetId": "subnet-aaa111",
+                    "DeleteOnTermination": true,
+                    "Groups": [
+                        "sg-xxxxxx"
+                    ],
+                    "AssociatePublicIpAddress": true
+                }
+            ],
+            "InstanceType": "t3a.large",
+            "UserData": "BASE64_ENCODED_SCRIPT_HERE"
         },
         {
-            "ImageId": "ami-xxxxxxxx",
+            "ImageId": "ami-0861f4e788f5069dd",
             "KeyName": "my-keypair",
-            "InstanceType": "t3a.large",
-            "SubnetId": "subnet-bbb222",
-            "SecurityGroups": ["sg-xxxxxx"],
-            "AssociatePublicIpAddress": true,
-            "UserData": "BASE64_ENCODED_SCRIPT_HERE",
+            "BlockDeviceMappings": [
+                {
+                    "DeviceName": "/dev/xvda",
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 7500,
+                        "VolumeSize": 15,
+                        "VolumeType": "gp3",
+                        "Encrypted": false,
+                        "Throughput": 125
+                    }
+                }
+            ],
             "TagSpecifications": [
-                { "ResourceType": "instance", "Tags": [{ "Key": "Name", "Value": "DevOps-Spot" }] }
-            ]
+                {
+                    "ResourceType": "instance",
+                    "Tags": [
+                        {
+                            "Key": "Name",
+                            "Value": "DevOps-Spot"
+                        }
+                    ]
+                }
+            ],
+            "NetworkInterfaces": [
+                {
+                    "DeviceIndex": 0,
+                    "SubnetId": "subnet-bbb222",
+                    "DeleteOnTermination": true,
+                    "Groups": [
+                        "sg-xxxxxx"
+                    ],
+                    "AssociatePublicIpAddress": true
+                }
+            ],
+            "InstanceType": "t3a.large",
+            "UserData": "BASE64_ENCODED_SCRIPT_HERE"
         },
         {
-            "ImageId": "ami-xxxxxxxx",
+            "ImageId": "ami-0861f4e788f5069dd",
             "KeyName": "my-keypair",
-            "InstanceType": "t3a.large",
-            "SubnetId": "subnet-ccc333",
-            "SecurityGroups": ["sg-xxxxxx"],
-            "AssociatePublicIpAddress": true,
-            "UserData": "BASE64_ENCODED_SCRIPT_HERE",
+            "BlockDeviceMappings": [
+                {
+                    "DeviceName": "/dev/xvda",
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 7500,
+                        "VolumeSize": 15,
+                        "VolumeType": "gp3",
+                        "Encrypted": false,
+                        "Throughput": 125
+                    }
+                }
+            ],
             "TagSpecifications": [
-                { "ResourceType": "instance", "Tags": [{ "Key": "Name", "Value": "DevOps-Spot" }] }
-            ]
+                {
+                    "ResourceType": "instance",
+                    "Tags": [
+                        {
+                            "Key": "Name",
+                            "Value": "DevOps-Spot"
+                        }
+                    ]
+                }
+            ],
+            "NetworkInterfaces": [
+                {
+                    "DeviceIndex": 0,
+                    "SubnetId": "subnet-ccc333",
+                    "DeleteOnTermination": true,
+                    "Groups": [
+                        "sg-xxxxxx"
+                    ],
+                    "AssociatePublicIpAddress": true
+                }
+            ],
+            "InstanceType": "t3a.large",
+            "UserData": "BASE64_ENCODED_SCRIPT_HERE"
         }
     ]
 }
