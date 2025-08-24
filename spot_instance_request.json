@@ -1,0 +1,48 @@
+{
+    "IamFleetRole": "arn:aws:iam::<account-id>:role/aws-ec2-spot-fleet-tagging-role",
+    "AllocationStrategy": "capacityOptimized",
+    "TargetCapacity": 1,
+    "ValidFrom": "2025-08-24T03:27:03.000Z",
+    "ValidUntil": "2026-08-24T03:27:03.000Z",
+    "TerminateInstancesWithExpiration": true,
+    "Type": "request",
+    "SpotMaxTotalPrice": "0.015",
+    "LaunchSpecifications": [
+        {
+            "ImageId": "ami-xxxxxxxx",
+            "KeyName": "my-keypair",
+            "InstanceType": "t3a.large",
+            "SubnetId": "subnet-aaa111",
+            "SecurityGroups": ["sg-xxxxxx"],
+            "AssociatePublicIpAddress": true,
+            "UserData": "BASE64_ENCODED_SCRIPT_HERE",
+            "TagSpecifications": [
+                { "ResourceType": "instance", "Tags": [{ "Key": "Name", "Value": "DevOps-Spot" }] }
+            ]
+        },
+        {
+            "ImageId": "ami-xxxxxxxx",
+            "KeyName": "my-keypair",
+            "InstanceType": "t3a.large",
+            "SubnetId": "subnet-bbb222",
+            "SecurityGroups": ["sg-xxxxxx"],
+            "AssociatePublicIpAddress": true,
+            "UserData": "BASE64_ENCODED_SCRIPT_HERE",
+            "TagSpecifications": [
+                { "ResourceType": "instance", "Tags": [{ "Key": "Name", "Value": "DevOps-Spot" }] }
+            ]
+        },
+        {
+            "ImageId": "ami-xxxxxxxx",
+            "KeyName": "my-keypair",
+            "InstanceType": "t3a.large",
+            "SubnetId": "subnet-ccc333",
+            "SecurityGroups": ["sg-xxxxxx"],
+            "AssociatePublicIpAddress": true,
+            "UserData": "BASE64_ENCODED_SCRIPT_HERE",
+            "TagSpecifications": [
+                { "ResourceType": "instance", "Tags": [{ "Key": "Name", "Value": "DevOps-Spot" }] }
+            ]
+        }
+    ]
+}
