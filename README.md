@@ -1,4 +1,4 @@
-# 🚀 AWS EC2 Spot Fleet Automation
+# AWS EC2 Spot Fleet Automation
 
 ![AWS](https://img.shields.io/badge/AWS-EC2-orange?logo=amazon-aws&logoColor=white)
 ![PowerShell](https://img.shields.io/badge/PowerShell-Automation-blue?logo=powershell&logoColor=white)
@@ -7,115 +7,70 @@
 
 ---
 
-## 📖 About this Project
+## About this Project
 
 This project demonstrates how to **automate the provisioning of AWS EC2 Spot Instances** using:  
 
 - **Spot Fleet Requests** -> to launch instances across multiple subnets with high availability.  
 - **AWS CLI** -> to request, describe, and manage fleets.  
-- **PowerShell OR Bash** -> to automate the full lifecycle (launch, wait for instance, fetch public IP, SSH in).  
-- **UserData scripts** -> to bootstrap essential DevOps tools (Git, Docker, Jenkins) immediately on first boot.  
+- **PowerShell/Batch/Bash** -> to automate the full lifecycle (launch, wait for instance, fetch public IP, SSH in).  
+- **UserData script** -> to bootstrap essential DevOps tools (Git, Docker, and Jenkins) immediately on first boot.
 
-### 🔹 Why this project?  
+### Why this project?  
 - **Cost Optimization** -> Spot Instances are up to 90% cheaper than On-Demand.  
 - **Automation** -> No manual setup; the instance is DevOps-ready in minutes.  
 - **Hands-on DevOps Practice** -> Demonstrates skills in AWS, Infrastructure as Code, automation scripting, and CI/CD setup.
 
 ---
 
-## 📌 Files in this Repo
+## Files in this Repo
 
-- **`spot_instance_request.json`** -> Multi-subnet Spot Fleet configuration (place Base64 user-data in `"UserData"`).
-- **`userdata.sh`** -> Bootstrap script (Docker, Git, Docker Compose, Jenkins container).
+- **`spot_instance_request.json`** -> Multi-subnet Spot Fleet configuration 
+- **`UserData.sh`** -> Bootstrap script (Docker, Git, and Jenkins).
 - **`launch-spotfleet.ps1`** -> PowerShell automation (request fleet -> wait for instance -> get public IP -> wait for SSH -> SSH).
-- **`launch-spotfleet.bat`** -> Batch automation (request fleet -> wait for instance -> get public IP -> SSH).
-- **`launch-spotfleet.sh`** -> Bash automation (request fleet -> wait for instance -> get public IP -> wait for SSH -> SSH).
+- **`launch-spotfleet.bat`** -> PowerShell automation (request fleet -> wait for instance -> get public IP -> SSH).
+- **`launch-spotfleet.sh`** -> PowerShell automation (request fleet -> wait for instance -> get public IP -> wait for SSH -> SSH).
 
 ---
 
-## ✅ Prerequisites
-
-Before running the scripts, ensure you have the following setup in your AWS environment:
-
-1. **VPC with at least 3 Public Subnets**  
-   - The Spot Fleet JSON uses multiple subnets for capacity optimization.  
-   - Ensure these subnets are public (with an Internet Gateway attached and route to `0.0.0.0/0`).
-
-2. **Security Group**  
-   - Must allow the following inbound rules:
-     - **TCP 22** -> SSH access
-     - **TCP 8080** -> Jenkins web interface
-     - (Optional) **0.0.0.0/0** for general public access (limit by IP if possible for security).
-
-3. **EC2 Key Pair**  
-   - Generate or use an existing key pair (`.pem` file).  
-   - Update its name in `spot_instance_request.json` under `KeyName`.  
-   - Keep the `.pem` file safe as it’s required for SSH login.
-
-4. **IAM Role for Spot Fleet**  
-   - Create an IAM role named (or with permissions equivalent to) **`aws-ec2-spot-fleet-tagging-role`**.  
-   - This role allows Spot Fleet to launch and tag instances on your behalf.  
-   - Attach the managed policy **`AmazonEC2SpotFleetTaggingRole`**.
-
-5. **AWS CLI Installed & Configured**  
-   - Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).  
-   - Configure it with your credentials:
-     ```bash
-     aws configure
-     ```
-   - If you don’t want to install locally, you can use **AWS CloudShell**.
-
-6. **PowerShell (Windows) or Terminal (Linux/macOS)**  
-   - The automation script (`launch-spotfleet.ps1`) is designed for PowerShell on Windows.  
-   - Alternatively, you can manually run CLI commands from CloudShell or execute the `launch-spotfleet.sh` shell script in Linux terminal.
-
----
-
-## 🧭 Steps to Launch the Spot Instance
+## Steps to Launch the Spot Instance
 
 ### 1) Fill in placeholders in `spot_instance_request.json`
 Open `spot_instance_request.json` and replace:
-- `<account-id>` -> your AWS Account ID
-- `ami-xxxxxxxx` -> a valid AMI (e.g., Amazon Linux 2)
-- `my-keypair` -> your EC2 key pair name
-- `subnet-aaa111`, `subnet-bbb222`, `subnet-ccc333` -> your subnet IDs
-- `sg-xxxxxx` -> your security group ID (must allow **TCP 22** for SSH and **TCP 8080** for Jenkins UI)
-
-> We’ll paste the Base64 of your `userdata.sh` into `"UserData"` in Step 2.
+- `YOUR-ACCOUNT-ID` -> your AWS Account ID
+- `ami-xxxxxxxx` -> a valid AMI (Currently its using Amazon Linux 2)
+- `YOUR-KEY-PAIR-NAME` -> your EC2 key pair name
+- `YOUR-SUBNET-ID`, `YOUR-2nd-SUBNET-ID`, `YOUR-3rd-SUBNET-ID` -> your subnet IDs
+- `YOUR-SECURITY-GROUP-ID` -> your security group ID (must allow **TCP 22** for SSH and **TCP 8080** for Jenkins UI)
 
 ---
 
-### 2) Convert `userdata.sh` to Base64 and paste into JSON
+### 3) Edit `launch-spotfleet.ps1` and update:
+- `$JsonFile` -> path to your `spot_instance_request.json`
 
-**Linux/macOS/WSL/CloudShell**
+- `$KeyFile` -> path to your `.pem` key
 
-1. Run the below command in terminal:
-```bash
-base64 userdata.sh > userdata.txt
+- `$User` -> `ec2-user` (Amazon Linux) or `ubuntu` (Ubuntu)
+
+- `$UserDataFile` -> path to your `UserData.sh`
+
+**If you want to use the batch file or bash script, then update the same values accordingly.**
+
+---
+
+### 4) Run the file in: 
+
+- Powershell
 ```
-2. Open userdata.txt and copy its single-line Base64 content.
-3. Paste the Base64 string into `spot_instance_request.json` in `UserData` section.
-
-> **Note:** Base64 will differ if we modify `userdata.sh`. Always regenerate after edits.
-
----
-
-### 3) Edit `launch-spotfleet.sh` and update:
-- `JSON_FILE` -> path to your `spot_instance_request.json`
-
-- `KEY_FILE` -> path to your `.pem` key
-
-- `USER` -> `ec2-user` (Amazon Linux) or `ubuntu` (Ubuntu)
-
----
-
-### 4) Make the file executable and run it.
-- To make the file executable:
+.\launch-spotfleet.ps1
+```
+- CMD
+```
+launch-spotfleet-.bat
+```
+- Bash
 ```
 chmod +x launch-spotfleet.sh
-```
-- To run the file:
-```
 ./launch-spotfleet.sh
 ```
 
@@ -127,9 +82,11 @@ chmod +x launch-spotfleet.sh
 
 - Wait for an instance assignment
 
+- Run UserData script to install packages
+
 - Retrieve the instance Public IP
 
-- Wait for SSH (22) to be reachable
+- Wait for SSH (22) to be reachable (This will not work in case of batch file)
 
 - SSH into the instance automatically
 
@@ -142,7 +99,7 @@ http://<Public-IP>:8080
 ```
 2. Run the below command and copy initial admin password:
 ```
-cat /var/log/user-data.log
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 3. Paste it in the password field in browser.
 4. Install desired plugins.
@@ -166,36 +123,10 @@ aws ec2 terminate-instances --instance-ids <i-xxxxxxxx>
 ---
 
 ## You can also launch the spot fleet via cloudshell if you don't have AWS cli in your PC.
-1. Copy the Public IPv4 Address of the instance from EC2 console.
-2. Open Cloudshell in AWS Console (You'll see the button in botton left and top bar >.)
-3. Click 'Actions' on right side and select 'Upload File' option.
-4. Upload the `spot_instance_request.json` file.
-5. Run the below command:
+1. Open Cloudshell in AWS Console (You'll see the `>_` button in botton left and top bar)
+2. Click 'Actions' on right side and select 'Upload File' option.
+3. Upload the `spot_instance_request.json` file.
+4. Run the below command:
 ```
 aws ec2 request-spot-fleet --spot-fleet-request-config file://spot_instance_request.json
 ```
-
----
-
-## ⚡ Alternative: Run with Batch Script OR Powershell (Windows)
-
-If you don’t want to use the Bash script (`launch-spotfleet.sh`),  
-you can use the included **`launch-spotfleet.bat`** or **`launch-spotfleet.ps1`** file instead.
-
-The `.bat` or `.ps1` scripts automate the same process:  
-- Submits the Spot Fleet request  
-- Waits for instance assignment  
-- Fetches the public IP
-- SSHs into the instance  
-
----
-
-## 🙌 Ending Note
-
-This project shows how AWS Spot Instances can be turned into a **cost-effective DevOps playground**,  
-where automation takes care of the heavy lifting.  
-
-Whether you use **PowerShell** or **Batch scripts**, the end goal is the same:  
-launch a ready-to-use EC2 Spot instance running **Docker and Jenkins**, in just a few minutes.  
-
-Happy building 🚀  
