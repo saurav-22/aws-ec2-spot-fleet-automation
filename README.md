@@ -14,7 +14,7 @@ This project demonstrates how to **automate the provisioning of AWS EC2 Spot Ins
 - **Spot Fleet Requests** -> to launch instances across multiple subnets with high availability.  
 - **AWS CLI** -> to request, describe, and manage fleets.  
 - **PowerShell/Batch/Bash** -> to automate the full lifecycle (launch, wait for instance, fetch public IP, SSH in).  
-- **UserData script** -> to bootstrap essential DevOps tools (Git, Docker, and Jenkins) immediately on first boot.
+- **UserData script** -> to fetch script from S3 and bootstrap essential DevOps tools (Git, Docker, and Jenkins) immediately on first boot.
 
 ### Why this project?  
 - **Cost Optimization** -> Spot Instances are up to 90% cheaper than On-Demand.  
@@ -26,10 +26,42 @@ This project demonstrates how to **automate the provisioning of AWS EC2 Spot Ins
 ## Files in this Repo
 
 - **`spot_instance_request.json`** -> Multi-subnet Spot Fleet configuration 
-- **`UserData.sh`** -> Bootstrap script (Docker, Git, and Jenkins).
+- **`UserData.sh`** -> Bootstrap script (Fetch installation script from S3 to install Docker, Git, and Jenkins).
+- **`packages-installation.sh`** -> Script to be uploaded on S3 to install Docker, Git, and Jenkins.
 - **`launch-spotfleet.ps1`** -> PowerShell automation (request fleet -> wait for instance -> get public IP -> wait for SSH -> SSH).
 - **`launch-spotfleet.bat`** -> PowerShell automation (request fleet -> wait for instance -> get public IP -> SSH).
 - **`launch-spotfleet.sh`** -> PowerShell automation (request fleet -> wait for instance -> get public IP -> wait for SSH -> SSH).
+
+---
+
+## Prerequisites
+1) AWS CLI Installed and Configured on your system.
+    - Follow ![AWS Documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to do so.
+
+2) S3 Bucket to store the `packages-installation.sh` script.
+    - Go to AWS Management Console and search for S3.
+    - Click on Create Bucket.
+    - Select 'General Purpose' as Bucket Type.
+    - Enter bucket name and click Create Bucket.
+    - Now open the bucket.
+    - Click on Upload button and upload `packages-installation.sh` file.
+  
+3) IAM Role for EC2 to access S3 bucket.
+    - Go to AWS Management Console and search for IAM.
+    - Click on Roles > Create Role.
+    - Select 'AWS Service' in Trusted entity type option.
+    - In the Use case drop down, select EC2 and click next.
+    - Select `AmazonS3ReadOnlyAccess` policy.
+    - Enter role name and click 'Create role' button.
+  
+4) Update `UserData.sh` script and get base64 encoded data
+    - Open `UserData.sh` script.
+    - Enter your bucket name in the placeholder `YOUR-BUCKET-NAME` and save.
+    - If you're using Linux/macOS, then open the terminal and type:
+      ```
+      base64 -w 0 UserData.sh
+      ```
+    - If you're on Windows system, then open any 3rd party tool online to do so. ( ![Base64 Encode](https://www.base64encode.net/) )
 
 ---
 
@@ -40,6 +72,8 @@ Open `spot_instance_request.json` and replace:
 - `YOUR-ACCOUNT-ID` -> your AWS Account ID
 - `ami-xxxxxxxx` -> a valid AMI (Currently its using Amazon Linux 2)
 - `YOUR-KEY-PAIR-NAME` -> your EC2 key pair name
+- `ENTER BASE64 ENCODED USER DATA SCRIPT` -> Base64 Encoded text
+- `IamInstanceProfie` -> Instance Profile ARN of the IAM Role created.
 - `YOUR-SUBNET-ID`, `YOUR-2nd-SUBNET-ID`, `YOUR-3rd-SUBNET-ID` -> your subnet IDs
 - `YOUR-SECURITY-GROUP-ID` -> your security group ID (must allow **TCP 22** for SSH and **TCP 8080** for Jenkins UI)
 
@@ -52,8 +86,6 @@ Open `spot_instance_request.json` and replace:
 
 - `$User` -> `ec2-user` (Amazon Linux) or `ubuntu` (Ubuntu)
 
-- `$UserDataFile` -> path to your `UserData.sh`
-
 **If you want to use the batch file or bash script, then update the same values accordingly.**
 
 ---
@@ -64,9 +96,15 @@ Open `spot_instance_request.json` and replace:
 ```
 .\launch-spotfleet.ps1
 ```
+  - NOTE - If you get any error in PowerShell saying running scripts is disabled on this system then launch Powershell as Administrator:
+    - **Bypass policy for current session** - Type `Set-ExecutionPolicy Bypass -Scope Process` and hit Enter.
+      
+      OR
+    - **Update Execution Policy for current user** - Type `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` and hit Enter.
+
 - CMD
 ```
-launch-spotfleet-.bat
+launch-spotfleet.bat
 ```
 - Bash
 ```
