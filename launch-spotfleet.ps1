@@ -2,10 +2,9 @@
 $JsonFile = "spot_instance_request.json" # Path to your JSON file
 $KeyFile  = "KEY-FILE-PATH\KEY-FILE-NAME.pem" # Path to your .pem file
 $User     = "ec2-user"   # Amazon Linux = ec2-user | Ubuntu = ubuntu
-$UserDataFile = "UserData.sh" # Path to your user data script
 
 # ---- Step 1: Request Spot Fleet ----
-$FleetId = aws ec2 request-spot-fleet --spot-fleet-request-config file://$JsonFile --user-data file://$UserDataFile --query "SpotFleetRequestId" --output text
+$FleetId = aws ec2 request-spot-fleet --spot-fleet-request-config file://$JsonFile --query "SpotFleetRequestId" --output text
 Write-Host "Spot Fleet Request ID: $FleetId"
 
 # ---- Step 2: Wait until an Instance ID is assigned ----
@@ -41,7 +40,7 @@ do {
     }
 } until ($sshReady)
 
-Write-Host "✅ SSH is ready, connecting..."
+Write-Host "SSH is ready, connecting..."
 
 # ---- Step 5: SSH into the instance ----
 ssh -i $KeyFile "$User@$PublicIp"
