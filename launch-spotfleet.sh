@@ -4,11 +4,10 @@
 JSON_FILE="spot_instance_request.json" # Path to your JSON file
 KEY_FILE="my-key.pem" # Path to your .pem file
 USER="ec2-user"   # Amazon Linux = ec2-user | Ubuntu = ubuntu
-USERDATA_FILE="UserData.sh" # Path to your user data script
 
 # ---- Step 1: Request Spot Fleet ----
 echo "Requesting Spot Fleet..."
-FLEET_ID=$(aws ec2 request-spot-fleet --spot-fleet-request-config file://$JSON_FILE --user-data file://$USERDATA_FILE --query "SpotFleetRequestId" --output text)
+FLEET_ID=$(aws ec2 request-spot-fleet --spot-fleet-request-config file://$JSON_FILE --query "SpotFleetRequestId" --output text)
 echo "Spot Fleet Request ID: $FLEET_ID"
 
 # ---- Step 2: Wait until an Instance ID is assigned ----
