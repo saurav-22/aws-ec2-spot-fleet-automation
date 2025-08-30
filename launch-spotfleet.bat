@@ -2,12 +2,13 @@
 setlocal enabledelayedexpansion
 
 REM ---- Config ----
-set JSON_FILE=spot_instance_request.json
-set KEY_FILE=C:\Users\YourUser\Downloads\saurav.pem
-set USER=ec2-user
+set JSON_FILE=spot_instance_request.json  REM Path to your JSON file
+set KEY_FILE=KEY-FILE-PATH\KEY-FILE-NAME.pem  REM Path to your .pem file
+set USER=ec2-user REM Amazon Linux = ec2-user | Ubuntu = ubuntu
+set USERDATA_FILE=UserData.sh  REM Path to your user data script
 
 REM ---- Step 1: Request Spot Fleet ----
-for /f %%i in ('aws ec2 request-spot-fleet --spot-fleet-request-config file://%JSON_FILE% --query "SpotFleetRequestId" --output text') do set FLEET_ID=%%i
+for /f %%i in ('aws ec2 request-spot-fleet --spot-fleet-request-config file://%JSON_FILE% --user-data file://%USERDATA_FILE% --query "SpotFleetRequestId" --output text') do set FLEET_ID=%%i
 echo Spot Fleet Request ID: %FLEET_ID%
 
 REM ---- Step 2: Wait until instance is running ----
