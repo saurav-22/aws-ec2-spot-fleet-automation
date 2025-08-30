@@ -1,5 +1,5 @@
 {
-    "IamFleetRole": "arn:aws:iam::<account-id>:role/aws-ec2-spot-fleet-tagging-role",
+    "IamFleetRole": "arn:aws:iam::<YOUR-ACCOUNT-ID>:role/aws-ec2-spot-fleet-tagging-role",
     "AllocationStrategy": "capacityOptimized",
     "TargetCapacity": 1,
     "ValidFrom": "2025-08-24T03:27:03.000Z",
@@ -10,7 +10,7 @@
     "LaunchSpecifications": [
         {
             "ImageId": "ami-0861f4e788f5069dd",
-            "KeyName": "my-keypair",
+            "KeyName": "YOUR-KEY-PAIR-NAME",
             "BlockDeviceMappings": [
                 {
                     "DeviceName": "/dev/xvda",
@@ -38,20 +38,19 @@
             "NetworkInterfaces": [
                 {
                     "DeviceIndex": 0,
-                    "SubnetId": "subnet-aaa111",
+                    "SubnetId": "YOUR-SUBNET-ID",
                     "DeleteOnTermination": true,
                     "Groups": [
-                        "sg-xxxxxx"
+                        "YOUR-SECURITY-GROUP-ID"
                     ],
                     "AssociatePublicIpAddress": true
                 }
             ],
-            "InstanceType": "t3a.large",
-            "UserData": "BASE64_ENCODED_SCRIPT_HERE"
+            "InstanceType": "t3a.large"
         },
         {
             "ImageId": "ami-0861f4e788f5069dd",
-            "KeyName": "my-keypair",
+            "KeyName": "YOUR-KEY-PAIR-NAME",
             "BlockDeviceMappings": [
                 {
                     "DeviceName": "/dev/xvda",
@@ -79,20 +78,19 @@
             "NetworkInterfaces": [
                 {
                     "DeviceIndex": 0,
-                    "SubnetId": "subnet-bbb222",
+                    "SubnetId": "YOUR-2nd-SUBNET-ID",
                     "DeleteOnTermination": true,
                     "Groups": [
-                        "sg-xxxxxx"
+                        "YOUR-SECURITY-GROUP-ID"
                     ],
                     "AssociatePublicIpAddress": true
                 }
             ],
-            "InstanceType": "t3a.large",
-            "UserData": "BASE64_ENCODED_SCRIPT_HERE"
+            "InstanceType": "t3a.large"
         },
         {
             "ImageId": "ami-0861f4e788f5069dd",
-            "KeyName": "my-keypair",
+            "KeyName": "YOUR-KEY-PAIR-NAME",
             "BlockDeviceMappings": [
                 {
                     "DeviceName": "/dev/xvda",
@@ -120,16 +118,15 @@
             "NetworkInterfaces": [
                 {
                     "DeviceIndex": 0,
-                    "SubnetId": "subnet-ccc333",
+                    "SubnetId": "YOUR-3rd-SUBNET-ID",
                     "DeleteOnTermination": true,
                     "Groups": [
-                        "sg-xxxxxx"
+                        "YOUR-SECURITY-GROUP-ID"
                     ],
                     "AssociatePublicIpAddress": true
                 }
             ],
-            "InstanceType": "t3a.large",
-            "UserData": "BASE64_ENCODED_SCRIPT_HERE"
+            "InstanceType": "t3a.large"
         }
     ]
 }
