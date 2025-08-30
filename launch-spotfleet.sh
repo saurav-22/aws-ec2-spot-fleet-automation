@@ -1,13 +1,14 @@
 #!/bin/bash
 
 # ---- Config ----
-JSON_FILE="spot_instance_request.json"
-KEY_FILE="my-key.pem"
+JSON_FILE="spot_instance_request.json" # Path to your JSON file
+KEY_FILE="my-key.pem" # Path to your .pem file
 USER="ec2-user"   # Amazon Linux = ec2-user | Ubuntu = ubuntu
+USERDATA_FILE="UserData.sh" # Path to your user data script
 
 # ---- Step 1: Request Spot Fleet ----
 echo "Requesting Spot Fleet..."
-FLEET_ID=$(aws ec2 request-spot-fleet --spot-fleet-request-config file://$JSON_FILE --query "SpotFleetRequestId" --output text)
+FLEET_ID=$(aws ec2 request-spot-fleet --spot-fleet-request-config file://$JSON_FILE --user-data file://$USERDATA_FILE --query "SpotFleetRequestId" --output text)
 echo "Spot Fleet Request ID: $FLEET_ID"
 
 # ---- Step 2: Wait until an Instance ID is assigned ----
@@ -35,7 +36,7 @@ SSH_READY=false
 while [ "$SSH_READY" = false ]; do
     if nc -z -w5 "$PUBLIC_IP" 22 2>/dev/null; then
         SSH_READY=true
-        echo "✅ SSH is ready, connecting..."
+        echo "SSH is ready, connecting..."
     else
         sleep 5
     fi
