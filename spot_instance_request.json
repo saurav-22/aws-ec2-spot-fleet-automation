@@ -11,6 +11,10 @@
         {
             "ImageId": "ami-0861f4e788f5069dd",
             "KeyName": "YOUR-KEY-PAIR-NAME",
+            "UserData": "ENTER BASE64 ENCODED USER DATA SCRIPT",
+            "IamInstanceProfile": {
+                "Arn": "INSTANCE-PROFILE-ARN"
+            },
             "BlockDeviceMappings": [
                 {
                     "DeviceName": "/dev/xvda",
@@ -51,6 +55,10 @@
         {
             "ImageId": "ami-0861f4e788f5069dd",
             "KeyName": "YOUR-KEY-PAIR-NAME",
+            "UserData": "ENTER BASE64 ENCODED USER DATA SCRIPT",
+            "IamInstanceProfile": {
+                "Arn": "INSTANCE-PROFILE-ARN"
+            },
             "BlockDeviceMappings": [
                 {
                     "DeviceName": "/dev/xvda",
@@ -91,6 +99,10 @@
         {
             "ImageId": "ami-0861f4e788f5069dd",
             "KeyName": "YOUR-KEY-PAIR-NAME",
+            "UserData": "ENTER BASE64 ENCODED USER DATA SCRIPT",
+            "IamInstanceProfile": {
+                "Arn": "INSTANCE-PROFILE-ARN"
+            },
             "BlockDeviceMappings": [
                 {
                     "DeviceName": "/dev/xvda",
