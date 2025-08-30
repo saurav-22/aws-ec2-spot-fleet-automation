@@ -1,27 +1,46 @@
 #!/bin/bash
-# Update system
-sudo yum update -y
-sudo yum install -y git curl wget unzip python3 python3-pip
+
+# Update currently installed software packages
+echo "Updating installed packages..."
+sudo yum update -y > /dev/null 2>&1
 
 # Install Docker
-sudo amazon-linux-extras install docker -y
-sudo yum install -y docker
-sudo systemctl start docker
+echo "Installing Docker..."
+sudo yum install docker -y > /dev/null 2>&1
+
+# Adding Jenkins repo
+echo "Adding Jenkins Repo..."
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum upgrade -y > /dev/null 2>&1
+
+# Install Java
+echo "Installing Java..."
+sudo yum install java-21-amazon-corretto -y > /dev/null 2>&1
+
+# Install Jenkins
+echo "Installing Jenkins..."
+sudo yum install jenkins -y > /dev/null 2>&1
+
+# Add Docker to ec2-user and Jenkins to the Docker group
+sudo usermod -aG docker $USER
+sudo usermod -aG docker jenkins
+
+# Enable and start Jenkins service
+echo "Enabling and starting Jenkins service..."
+sudo systemctl enable jenkins
+sudo systemctl start jenkins 
+
+# Enable and start Docker service
+echo "Enabling and starting Docker service..."
 sudo systemctl enable docker
-sudo usermod -aG docker ec2-user
+sudo systemctl start docker
 
-# Setup Jenkins container
-sudo mkdir -p /var/jenkins_home
-sudo chown -R 1000:1000 /var/jenkins_home
-sudo docker run -d --name jenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home jenkins/jenkins:lts
-echo "Jenkins Initial Admin Password:" >> /var/log/user-data.log
-sudo cat /var/jenkins_home/secrets/initialAdminPassword >> /var/log/user-data.log
-
-
-# Install CloudWatch Agent (for monitoring)
-sudo yum install -y amazon-cloudwatch-agent
+# Install Git
+echo "Installing Git..."
+sudo yum install git -y > /dev/null 2>&1
 
 # MOTD
-echo "Welcome to DevOps Spot Instance 🚀 (Docker + Jenkins preinstalled)" | sudo tee /etc/motd
+echo "Welcome to DevOps Spot Instance." | sudo tee /etc/motd
 
 echo "Bootstrap completed!"
