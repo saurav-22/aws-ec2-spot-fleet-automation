@@ -73,7 +73,7 @@ Open `spot_instance_request.json` and replace:
 - `ami-xxxxxxxx` -> a valid AMI (Currently its using Amazon Linux 2)
 - `YOUR-KEY-PAIR-NAME` -> your EC2 key pair name
 - `ENTER BASE64 ENCODED USER DATA SCRIPT` -> Base64 Encoded text
-- `IamInstanceProfie` -> Instance Profile ARN of the IAM Role created.
+- `INSTANCE-PROFILE-ARN` -> Instance Profile ARN of the IAM Role created.
 - `YOUR-SUBNET-ID`, `YOUR-2nd-SUBNET-ID`, `YOUR-3rd-SUBNET-ID` -> your subnet IDs
 - `YOUR-SECURITY-GROUP-ID` -> your security group ID (must allow **TCP 22** for SSH and **TCP 8080** for Jenkins UI)
 
